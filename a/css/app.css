@@ -1,0 +1,33 @@
+/* Here */
+#boards {
+    width:960px;
+}
+
+#boards .board-header {
+    width: 33%;
+    float:left;
+    text-align:center;
+}
+
+#boards .lane {
+    clear:both;
+}
+
+#boards .board {
+    width: 33%;
+    padding:0px;
+    margin:0px;
+    min-height:400px;
+    float:left;
+    display:block;
+}
+
+#boards .board li {
+    padding:0px;
+    display:block;
+    float:left;
+    margin:0 10px 10px 0;
+    border: solid 1px #000;
+    width:100px;
+    height:100px;
+}

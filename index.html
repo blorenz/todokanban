@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html manifest="cache.appcache" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+    <script>
+        window.applicationCache.addEventListener('updateready', function(e) {
+            if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                window.applicationCache.swapCache();
+                if (confirm('A new version of this site is available. Load it?')) {
+                  window.location.reload();
+                }
+            }
+        }, false); 
+    </script>
+    <link rel="stylesheet" href="a/css/app.css" />
+</head>
+<body>
+	
+    <div id="boards">
+    	<div class="board-header">Backlog</div>
+    	<div class="board-header">In Progress</div>
+    	<div class="board-header">Done</div>
+    	<div class="lane">
+    		<ul class="board"><li draggable="true"></li>
+<li draggable="true"></li>
+<li draggable="true"></li>
+<li draggable="true"></li>
+<li draggable="true"></li>
+<li draggable="true"></li></ul>
+    		<ul class="board"></ul>
+    		<ul class="board"></ul>
+    	</div>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+function handleDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault(); // Necessary. Allows us to drop.
+  }
+
+  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+
+  return false;
+}
+
+function handleDragEnter(e) {
+  // this / e.target is the current hover target.
+  //this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('over');  // this / e.target is previous target element.
+}
+
+
+function handleDragEnd(e) {
+  // this/e.target is the source node.
+
+  [].forEach.call(cols, function (col) {
+    col.classList.remove('over');
+  });
+}
+
+
+var dragSrcEl = null;
+
+function handleDragStart(e) {
+  // Target (this) element is the source node.
+  this.style.opacity = '0.4';
+
+  dragSrcEl = this;
+
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.outerHTML);
+}
+
+function handleDrop(e) {
+  // this/e.target is current target element.
+
+  if (e.stopPropagation) {
+    e.stopPropagation(); // Stops some browsers from redirecting.
+  }
+
+
+
+  // Don't do anything if dropping the same column we're dragging.
+  if (dragSrcEl != this) {
+    // Set the source column's HTML to the HTML of the columnwe dropped on.
+    //this.innerHTML += e.dataTransfer.getData('text/html');
+   // this.innerHTML += dragSrcEl.outerHTML;
+    dragSrcEl.style.opacity = "1";
+    this.appendChild(dragSrcEl);
+    //dragSrcEl.parentNode.removeChild(dragSrcEl);
+
+  }
+
+  return false;
+}
+
+var cols = document.querySelectorAll('#boards .board li');
+[].forEach.call(cols, function(col) {
+  col.addEventListener('dragstart', handleDragStart, false);
+});
+
+var boards = document.querySelectorAll('#boards .board');
+[].forEach.call(boards, function(col) {
+  col.addEventListener('dragenter', handleDragEnter, false);
+  col.addEventListener('dragover', handleDragOver, false);
+  col.addEventListener('dragleave', handleDragLeave, false);
+  col.addEventListener('dragend', handleDragEnd, false);
+  col.addEventListener('drop', handleDrop, false);
+});
+
+</script>
+</html>
+
